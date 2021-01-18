@@ -65,17 +65,33 @@ const App = () => {
             setTimeout(() => {
               setSuccessMessage(null);
             }, 3000);
+          })
+          .catch((error) => {
+            console.log(error.response.data);
+            setErrorMessage(error.response.data.error);
+            setTimeout(() => {
+              setErrorMessage(null);
+            }, 3000);
           });
       }
     } else {
-      peopleService.create(newObject).then((returendPerson) => {
-        setPersons(persons.concat(returendPerson));
-        setFilteredPersons(persons.concat(returendPerson));
-        setSuccessMessage(`Added ${returendPerson.name}`);
-        setTimeout(() => {
-          setSuccessMessage(null);
-        }, 3000);
-      });
+      peopleService
+        .create(newObject)
+        .then((returendPerson) => {
+          setPersons(persons.concat(returendPerson));
+          setFilteredPersons(persons.concat(returendPerson));
+          setSuccessMessage(`Added ${returendPerson.name}`);
+          setTimeout(() => {
+            setSuccessMessage(null);
+          }, 3000);
+        })
+        .catch((error) => {
+          console.log(error.response.data);
+          setErrorMessage(error.response.data.error);
+          setTimeout(() => {
+            setErrorMessage(null);
+          }, 3000);
+        });
     }
     setNewName("");
     setNewNumber("");
