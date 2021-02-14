@@ -11,6 +11,7 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
+
   const [notification, setNotification] = useState(null)
 
   const getBlogs = async () => {
@@ -53,7 +54,7 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      notifyWith('wrong username or password', 'error')
+      notifyWith('wrong credentials', 'error')
     }
   }
 
@@ -70,6 +71,11 @@ const App = () => {
       notifyWith(`${exception}`, 'error')
     }
   }
+
+  const updateLikes = (blog) => {
+    blogService.update(blog.id, { ...blog, likes: (blog.likes += 1) })
+  }
+
 
   const deleteBlog = async (blog) => {
     if (user.username === blog.user.username) {
@@ -89,6 +95,7 @@ const App = () => {
         <input
           type='text'
           value={username}
+          id='username'
           name='Username'
           onChange={({ target }) => setUsername(target.value)}
         />
@@ -98,13 +105,16 @@ const App = () => {
         <input
           type='password'
           value={password}
+          id='password'
           name='Password'
           onChange={({ target }) => setPassword(target.value)}
         />
       </div>
-      <button type='submit'>login</button>
+      <button id='login-button' type='submit'>
+        login
+      </button>
     </form>
-  )
+  );
 
   const blogForm = () => (
     <Togglable buttonLabel='new blog' ref={blogFormRef}>
@@ -140,7 +150,7 @@ const App = () => {
 
           {blogForm()}
           {blogs.map((blog) => (
-            <Blog key={blog.id} blog={blog} onRemove={deleteBlog} />
+            <Blog key={blog.id} blog={blog} updateLikes={updateLikes} onRemove={deleteBlog} />
           ))}
         </>
       )}

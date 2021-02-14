@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
-import blogService from '../services/blogs'
 
-const Blog = ({ blog, onRemove }) => {
+const Blog = ({ blog, updateLikes, onRemove }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -13,15 +12,10 @@ const Blog = ({ blog, onRemove }) => {
   const [visibility, setVisibility] = useState(false)
   const toggleVisibility = { display: visibility ? '' : 'none' }
 
-  const [likes, setLikes] = useState(blog.likes)
-
-  const updateLikes = () => {
-    blogService.update(blog.id, { ...blog, likes: (blog.likes += 1) })
-    setLikes(likes + 1)
-  }
+  const [likes, setLikes] = useState(blog.likes);
 
   return (
-    <div style={blogStyle}>
+    <div className='blog' style={blogStyle}>
       {blog.title} {blog.author}{' '}
       <button onClick={() => setVisibility(!visibility)}>
         {visibility ? 'hide' : 'view'}
@@ -29,10 +23,10 @@ const Blog = ({ blog, onRemove }) => {
       <div style={toggleVisibility}>
         <div>{blog.url}</div>
         <div>
-          likes {likes} <button onClick={updateLikes}>like</button>
+          likes {likes} <button onClick={()=>{ updateLikes(blog); setLikes(likes + 1); }}>like</button>
         </div>
         <div>{blog.user.name}</div>
-        <button onClick={() => onRemove(blog)}>remove</button>
+        <button id='remove' onClick={() => onRemove(blog)}>remove</button>
       </div>
     </div>
   )
